@@ -1,0 +1,8 @@
+<!-- RELAX NG Schema for HTML 5: schema locating rules for nxml-mode -->
+<locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+  <uri pattern="*.html" typeId="XHTML5"/>
+  <uri pattern="*.xhtml" typeId="XHTML5"/>
+  <namespace ns="http://www.w3.org/1999/xhtml" typeId="XHTML5"/>
+  <documentElement localName="html" typeId="XHTML5"/>
+  <typeId id="XHTML5" uri="syntax/relaxng/xhtml5.rnc"/>
+</locatingRules>
