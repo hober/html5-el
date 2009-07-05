@@ -14,5 +14,4 @@ Finally, wire this stuff into `nxml-mode` like so, altering the path to
     (eval-after-load "rng-loc"
       '(add-to-list 'rng-schema-locating-files "~/code/html5-el/schemas.xml"))
 
-    (eval-after-load "rng-dt"
-      '(require 'whattf-dt))
+    (require 'whattf-dt)
