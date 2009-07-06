@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright (C) 2009  Edward O'Connor
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -20,30 +22,17 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-dummy:
-	echo "USAGE: $(make) [html5-ncr.el]"
+def extract(input, output):
+    in_parsing_section = False
+    for line in input:
+        if 'h2 id="syntax"' in line:
+            in_parsing_section = True
+        if '<h2><dfn>The XHTML syntax</dfn></h2>' in line:
+            in_parsing_section = False
+        if in_parsing_section:
+            print >> output, ";;%s" % line,
 
-clean:
-	rm parsing-algorithm *~ *.elc
+if __name__ == '__main__':
+    import sys
+    extract(sys.stdin, sys.stdout)
 
-distclean:
-	rm -rf relaxng
-
-parsing-algorithm: webapps tools/extract-parsing-algorithm.py
-	python tools/extract-parsing-algorithm.py < webapps/source > parsing-algorithm
-
-html5-ncr.el: webapps tools/build-ncr.py
-	python tools/build-ncr.py webapps/entities-legacy.inc webapps/entities-unicode.inc > $@
-
-## External repositories
-
-# (non-normative) RELAX NG schema for HTML5
-relaxng:
-	svn co http://svn.versiondude.net/whattf/syntax/trunk/relaxng/ relaxng
-# The HTML5 spec source
-webapps:
-	svn co http://svn.whatwg.org/webapps webapps
-
-update:
-	cd relaxng; svn up
-	cd webapps; svn up
