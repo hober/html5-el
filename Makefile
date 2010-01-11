@@ -39,7 +39,7 @@ html5-ncr.el: webapps tools/build-ncr.py
 
 # (non-normative) RELAX NG schema for HTML5
 relaxng:
-	svn co http://svn.versiondude.net/whattf/syntax/trunk/relaxng/ relaxng
+	svn co http://whattf.svn.cvsdude.com/syntax/trunk/relaxng/ relaxng
 # The HTML5 spec source
 webapps:
 	svn co http://svn.whatwg.org/webapps webapps
