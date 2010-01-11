@@ -1,2 +1,4 @@
 syntax
 webapps
+*.elc
+/relaxng
