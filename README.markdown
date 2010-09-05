@@ -1,7 +1,13 @@
+# html5-el - edit XHTML5 documents with nxml-mode
+
 This project provides the ability to use `nxml-mode` to edit XHTML5
-documents with validation. First, you'll need to fetch the RELAX NG
-schema from the WHAT Task Force subversion repository; a simple `make
-relaxng` in this directory should do the trick.
+documents with validation.
+
+## How to use
+
+First, you'll need to fetch the RELAX NG schema from the WHAT Task Force
+subversion repository; a simple `make relaxng` in this directory should
+do the trick.
 
 Next, you'll need to add this directory to your `load-path`. Let's
 assume you've placed it in `~/code/html5-el/`.

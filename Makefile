@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Edward O'Connor
+# Copyright (C) 2009, 2010  Edward O'Connor
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright (C) 2009  Edward O'Connor
+# Copyright (C) 2009, 2010  Edward O'Connor
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -31,7 +31,7 @@ matcher = re.compile(r".*[>](.*)[<][/]code[>].*U[+]([0-9A-F]+).*")
 
 header = """;;; html5-ncr.el --- Named Character References in HTML5
 
-;; Copyright (C) 2009  Edward O'Connor
+;; Copyright (C) 2009, 2010  Edward O'Connor
 ;; A derivative work of the HTML5 specification, which is
 ;; Copyright (C) 2004-2009 Apple Computer, Inc., Mozilla Foundation, and
 ;; Opera Software ASA.

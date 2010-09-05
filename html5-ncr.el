@@ -1,6 +1,6 @@
 ;;; html5-ncr.el --- Named Character References in HTML5
 
-;; Copyright (C) 2009  Edward O'Connor
+;; Copyright (C) 2009, 2010  Edward O'Connor
 ;; A derivative work of the HTML5 specification, which is
 ;; Copyright (C) 2004-2009 Apple Computer, Inc., Mozilla Foundation, and
 ;; Opera Software ASA.
@@ -8,25 +8,8 @@
 ;; Author: Edward O'Connor <hober0@gmail.com>
 ;; Keywords: hypermedia, wp
 
-;; Permission is hereby granted, free of charge, to any person obtaining
-;; a copy of this software and associated documentation files (the
-;; "Software"), to deal in the Software without restriction, including
-;; without limitation the rights to use, copy, modify, merge, publish,
-;; distribute, sublicense, and/or sell copies of the Software, and to
-;; permit persons to whom the Software is furnished to do so, subject to
-;; the following conditions:
-
-;; The above copyright notice and this permission notice shall be
-;; included in all copies or substantial portions of the Software.
-
-;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-;; NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-;; BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-;; ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-;; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-;; SOFTWARE.
+;; You are granted a license to use, reproduce and create
+;; derivative works of this document.
 
 ;;; Commentary:
 
@@ -177,6 +160,7 @@
 ("rbrack;" . #x0005D)
 ("Hat;" . #x0005E)
 ("lowbar;" . #x0005F)
+("UnderBar;" . #x0005F)
 ("grave;" . #x00060)
 ("DiacriticalGrave;" . #x00060)
 ("lcub;" . #x0007B)
@@ -209,7 +193,6 @@
 ("circledR;" . #x000AE)
 ("REG;" . #x000AE)
 ("macr;" . #x000AF)
-("OverBar;" . #x000AF)
 ("strns;" . #x000AF)
 ("deg;" . #x000B0)
 ("plusmn;" . #x000B1)
@@ -240,6 +223,7 @@
 ("Atilde;" . #x000C3)
 ("Auml;" . #x000C4)
 ("Aring;" . #x000C5)
+("angst;" . #x000C5)
 ("AElig;" . #x000C6)
 ("Ccedil;" . #x000C7)
 ("Egrave;" . #x000C8)
@@ -438,7 +422,6 @@
 ("dblac;" . #x002DD)
 ("DiacriticalDoubleAcute;" . #x002DD)
 ("DownBreve;" . #x00311)
-("UnderBar;" . #x00332)
 ("Alpha;" . #x00391)
 ("Beta;" . #x00392)
 ("Gamma;" . #x00393)
@@ -463,12 +446,12 @@
 ("Chi;" . #x003A7)
 ("Psi;" . #x003A8)
 ("Omega;" . #x003A9)
+("ohm;" . #x003A9)
 ("alpha;" . #x003B1)
 ("beta;" . #x003B2)
 ("gamma;" . #x003B3)
 ("delta;" . #x003B4)
-("epsiv;" . #x003B5)
-("varepsilon;" . #x003B5)
+("epsi;" . #x003B5)
 ("epsilon;" . #x003B5)
 ("zeta;" . #x003B6)
 ("eta;" . #x003B7)
@@ -490,8 +473,6 @@
 ("upsi;" . #x003C5)
 ("upsilon;" . #x003C5)
 ("phi;" . #x003C6)
-("phiv;" . #x003C6)
-("varphi;" . #x003C6)
 ("chi;" . #x003C7)
 ("psi;" . #x003C8)
 ("omega;" . #x003C9)
@@ -501,6 +482,8 @@
 ("Upsi;" . #x003D2)
 ("upsih;" . #x003D2)
 ("straightphi;" . #x003D5)
+("phiv;" . #x003D5)
+("varphi;" . #x003D5)
 ("piv;" . #x003D6)
 ("varpi;" . #x003D6)
 ("Gammad;" . #x003DC)
@@ -510,8 +493,9 @@
 ("varkappa;" . #x003F0)
 ("rhov;" . #x003F1)
 ("varrho;" . #x003F1)
-("epsi;" . #x003F5)
+("epsiv;" . #x003F5)
 ("straightepsilon;" . #x003F5)
+("varepsilon;" . #x003F5)
 ("bepsi;" . #x003F6)
 ("backepsilon;" . #x003F6)
 ("IOcy;" . #x00401)
@@ -664,6 +648,7 @@
 ("lsaquo;" . #x02039)
 ("rsaquo;" . #x0203A)
 ("oline;" . #x0203E)
+("OverBar;" . #x0203E)
 ("caret;" . #x02041)
 ("hybull;" . #x02043)
 ("frasl;" . #x02044)
@@ -730,12 +715,10 @@
 ("TRADE;" . #x02122)
 ("integers;" . #x02124)
 ("Zopf;" . #x02124)
-("ohm;" . #x02126)
 ("mho;" . #x02127)
 ("Zfr;" . #x02128)
 ("zeetrf;" . #x02128)
 ("iiota;" . #x02129)
-("angst;" . #x0212B)
 ("bernou;" . #x0212C)
 ("Bernoullis;" . #x0212C)
 ("Bscr;" . #x0212C)
@@ -1618,6 +1601,8 @@
 ("VerticalSeparator;" . #x02758)
 ("lbbrk;" . #x02772)
 ("rbbrk;" . #x02773)
+("bsolhsub;" . #x027C8)
+("suphsol;" . #x027C9)
 ("lobrk;" . #x027E6)
 ("LeftDoubleBracket;" . #x027E6)
 ("robrk;" . #x027E7)
@@ -1805,7 +1790,6 @@
 ("rtriltri;" . #x029CE)
 ("LeftTriangleBar;" . #x029CF)
 ("RightTriangleBar;" . #x029D0)
-("race;" . #x029DA)
 ("iinfin;" . #x029DC)
 ("infintie;" . #x029DD)
 ("nvinfin;" . #x029DE)
