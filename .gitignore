@@ -2,3 +2,4 @@ syntax
 webapps
 *.elc
 /relaxng
+language-subtag-registry

@@ -35,6 +35,9 @@ parsing-algorithm: webapps tools/extract-parsing-algorithm.py
 html5-ncr.el: webapps tools/build-ncr.py
 	python tools/build-ncr.py webapps/entities-legacy.inc webapps/entities-unicode.inc > $@
 
+html5-langs.el: tools/build-langs.py language-subtag-registry
+	python tools/build-langs.py language-subtag-registry > html5-langs.el
+
 ## External repositories
 
 # (non-normative) RELAX NG schema for HTML5
@@ -43,6 +46,9 @@ relaxng:
 # The HTML5 spec source
 webapps:
 	svn co http://svn.whatwg.org/webapps webapps
+# Two- and three-letter language codes
+language-subtag-registry:
+	curl -O http://www.iana.org/assignments/language-subtag-registry
 
 update:
 	cd relaxng; svn up
