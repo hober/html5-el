@@ -24,10 +24,10 @@ dummy:
 	echo "USAGE: $(make) [html5-ncr.el]"
 
 clean:
-	rm parsing-algorithm *~ *.elc
+	rm -f language-subtag-registry parsing-algorithm *~ *.elc
 
 distclean:
-	rm -rf relaxng
+	rm -rf relaxng webapps
 
 parsing-algorithm: webapps tools/extract-parsing-algorithm.py
 	python tools/extract-parsing-algorithm.py < webapps/source > parsing-algorithm
