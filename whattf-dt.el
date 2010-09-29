@@ -49,6 +49,23 @@
       (rng-dt-error "Not a valid non-negative integer.")
     t))
 
+(defun whattf-dt-browsing-context (str)
+  (cond ((eq (length str) 0)
+         (rng-dt-error "Browsing context name must be at least one character long."))
+        ((eq (substring str 0 1) "_")
+         (rng-dt-error "Browsing context name started with an underscore."))
+        (t
+         t)))
+
+(defun whattf-dt-browsing-context-or-keyword (str)
+  (cond ((eq (length str) 0)
+         (rng-dt-error "Browsing context name must be at least one character long."))
+        ((and (eq (substring str 0 1) "_")
+              (not (member (substring str 1) '("blank" "self" "top" "parent"))))
+         (rng-dt-error (format "Reserved keyword %s used." (substring str 1))))
+        (t
+         t)))
+
 ;; Is this too restrictive? Should we be allowing things like
 ;; en-GB-x-Hixie?
 (defun whattf-dt-language (code)
@@ -75,12 +92,13 @@
 NAME is a symbol giving the local name of the datatype. PARAMS is a list
 of pairs (PARAM-NAME . PARAM-VALUE) where PARAM-NAME is a symbol giving
 the name of the parameter and PARAM-VALUE is a string giving its value."
-    (cond ((eq name 'integer-non-negative) '(nil whattf-dt-integer-non-negative))
+    (cond ((eq name 'browsing-context) '(t whattf-dt-browsing-context))
+          ((eq name 'browsing-context-or-keyword) '(t whattf-dt-browsing-context-or-keyword))
+          ((eq name 'integer-non-negative) '(nil whattf-dt-integer-non-negative))
           ((eq name 'keylabellist) '(t whattf-dt-keylabellist))
           ((eq name 'language) '(t whattf-dt-language))
           ((eq name 'zero) '(t whattf-dt-zero))
           ;; TODO: other datatypes below
-          ((eq name 'browsing-context-or-keyword) '(t identity))
           ((eq name 'circle) '(t identity))
           ((eq name 'color) '(t identity))
           ((eq name 'date) '(t identity))
