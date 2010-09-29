@@ -20,6 +20,8 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+EMACS=emacs
+
 dummy:
 	echo "USAGE: $(make) [html5-ncr.el]"
 
@@ -38,6 +40,16 @@ html5-ncr.el: webapps tools/build-ncr.py
 html5-langs.el: tools/build-langs.py language-subtag-registry
 	python tools/build-langs.py language-subtag-registry > html5-langs.el
 
+test: html5lib/testdata/tokenizer/test1.test
+	@$(EMACS) -batch -l h5-maint.el -f h5-run-tests html5lib/testdata/tokenizer/*.test
+
+.el.elc:
+	@$(EMACS) -batch -f batch-byte-compile $*.el \
+		|| (echo "Perhaps you should specifcy LOAD_PATH to make?" \
+		"(e.g. \"gmake LOAD_PATH=~/elisp\".)" \
+		&& echo "Please see README for compilation instructions." \
+		&& exit 1)
+
 ## External repositories
 
 # (non-normative) RELAX NG schema for HTML5
@@ -49,6 +61,9 @@ webapps:
 # Two- and three-letter language codes
 language-subtag-registry:
 	curl -O http://www.iana.org/assignments/language-subtag-registry
+html5lib/testdata/tokenizer/test1.test: html5lib
+html5lib:
+	hg clone https://html5lib.googlecode.com/hg/ html5lib
 
 update:
 	cd relaxng; svn up

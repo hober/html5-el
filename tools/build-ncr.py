@@ -48,10 +48,47 @@ header = """;;; html5-ncr.el --- Named Character References in HTML5
 
 ;;; Code:
 
-(defvar html5-named-character-references
-  '("""
+(require 'cl)
 
-footer = """)
+(defstruct h5-trie
+  (code-point nil)
+  (children nil))
+
+(defun h5-trie-insert (trie str &optional code-point)
+  (if (zerop (length str))
+      (setf (h5-trie-code-point trie) code-point)
+    (let* ((char (elt str 0))
+           (child (gethash char (h5-trie-children trie))))
+      (unless child
+        (setq child (make-h5-trie
+                     :code-point nil
+                     :children (make-hash-table :test 'eq)))
+        (puthash char child (h5-trie-children trie)))
+      (h5-trie-insert child (substring str 1) code-point))))
+
+(defun h5-trie-member-p (trie str)
+  (if (zerop (length str))
+      (h5-trie-code-point trie)
+    (let* ((char (elt str 0))
+           (child (gethash char (h5-trie-children trie))))
+      (if child
+          (h5-trie-member-p child (substring str 1))
+        nil))))
+
+(defun h5-trie-subtrie (trie prefix)
+  (if (zerop (length prefix))
+      trie
+    (let* ((char (elt prefix 0))
+           (child (gethash char (h5-trie-children trie))))
+      (if child
+          (h5-trie-subtrie child (substring prefix 1))
+        nil))))
+
+(defvar html5-named-character-references
+  (let ((trie (make-h5-trie :code-point nil
+                            :children (make-hash-table :test 'eq))))"""
+
+footer = """    trie)
   "Alist mapping named character references to Unicode code points.")
 
 (provide 'html5-ncr)
@@ -65,7 +102,7 @@ def extract(files):
         for line in f:
             matched = matcher.match(line)
             if matched:
-                print "(\"%s\" . #x%s)" % (matched.group(1), matched.group(2))
+                print "    (h5-trie-insert trie \"%s\" #x%s)" % (matched.group(1), matched.group(2))
         f.close()
     print footer
 

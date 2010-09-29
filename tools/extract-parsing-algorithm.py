@@ -24,6 +24,7 @@
 
 def extract(input, output):
     in_parsing_section = False
+    print >> output, ";; -*- emacs-lisp -*-"
     for line in input:
         if 'h2 id="syntax"' in line:
             in_parsing_section = True
