@@ -1699,26 +1699,26 @@ consecutive ones.")
            ;; <dd>Append the lowercase version of the <span>current input
            ;; character</span> (add 0x0020 to the character's code point) to
            ;; the current attribute's name.</dd>
-            (setf (h5-attr-name *h5-curattr*)
-                  (concat (h5-attr-name *h5-curattr*)
-                          (downcase char-str)))
-           (;; <dt>U+0022 QUOTATION MARK (&quot;)</dt>
-            ;; <dt>U+0027 APOSTROPHE (')</dt>
-            ;; <dt>U+003C LESS-THAN SIGN (&lt;)</dt>
-            (string-match "[\"'<]" char-str)
-            ;; <dd><span>Parse error</span>.
-            (h5-parse-error)
-            ;; Treat it as per the "anything else" entry below.</dd>
-            (funcall anything-else))
-           ((eq char :eof) ;; <dt>EOF</dt>
-            ;; <dd><span>Parse error</span>.
-            (h5-parse-error)
-            ;; Reconsume the EOF character
-            (backward-char 1)
-            ;; in the <span>data state</span>.</dd>
-            (h5-switch-state 'h5-data-state))
-           (t ;; <dt>Anything else</dt>
-            (funcall anything-else))))))
+           (setf (h5-attr-name *h5-curattr*)
+                 (concat (h5-attr-name *h5-curattr*)
+                         (downcase char-str))))
+          (;; <dt>U+0022 QUOTATION MARK (&quot;)</dt>
+           ;; <dt>U+0027 APOSTROPHE (')</dt>
+           ;; <dt>U+003C LESS-THAN SIGN (&lt;)</dt>
+           (string-match "[\"'<]" char-str)
+           ;; <dd><span>Parse error</span>.
+           (h5-parse-error)
+           ;; Treat it as per the "anything else" entry below.</dd>
+           (funcall anything-else))
+          ((eq char :eof) ;; <dt>EOF</dt>
+           ;; <dd><span>Parse error</span>.
+           (h5-parse-error)
+           ;; Reconsume the EOF character
+           (backward-char 1)
+           ;; in the <span>data state</span>.</dd>
+           (h5-switch-state 'h5-data-state))
+          (t ;; <dt>Anything else</dt>
+           (funcall anything-else)))))
 
 (defun h5-after-attribute-name-state ()
   ""
