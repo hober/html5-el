@@ -73,21 +73,23 @@ consecutive ones.")
 (defun h5-parse-error (&optional reason)
   ""
   (let ((here (point)))
-    (put-text-property (1- here) here 'h5-parse-error (or reason t))))
+    (put-text-property (1- here) here 'h5-parse-error (or reason t)))
+  (h5-emit :parse-error))
 
 (defsubst h5-space-p (str)
   ""
-  (unless (stringp str)
-    (error "Forgot to pass string to `h5-space-p'!"))
-  (string-match "[\t\n\f ]" str))
+  (and (stringp str)
+       (string-match "[\t\n\f ]" str)))
 
 (defsubst h5-uppercase-p (str)
   ""
-  (string-match "[A-Z]" str))
+  (and (stringp str)
+       (string-match "[A-Z]" str)))
 
 (defsubst h5-lowercase-p (str)
   ""
-  (string-match "[a-z]" str))
+  (and (stringp str)
+       (string-match "[a-z]" str)))
 
 (defun h5-consume-the-next-input-character ()
   ""
@@ -230,7 +232,9 @@ consecutive ones.")
     ;;            h5-charbuf-nonempty)
     ;;   (h5-emit-charbuf))
 
-    (cond ((h5-start-tag-token-p token)
+    (cond ((eq token :parse-error)
+           (throw 'h5-emit :parse-error))
+          ((h5-start-tag-token-p token)
            (h5-inside 'start-tag)
            (setq h5-last-start-tag-emitted token)
            ;; When a start tag token is emitted with its <i>self-closing
@@ -414,7 +418,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
          (case-fold-search nil)
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond ((eq char ?!) ;; <dt>U+0021 EXCLAMATION MARK (!)</dt>
            ;; (h5-emit-charbuf)
            ;; <dd>Switch to the <span>markup declaration open
@@ -470,7 +474,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0041 LATIN CAPITAL LETTER A through to U+005A LATIN
            ;; CAPITAL LETTER Z</dt>
            (h5-uppercase-p char-str)
@@ -522,7 +526,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char))
+         (char-str (if (numberp char) (string char) char))
          (tok *h5-curtok*))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
@@ -589,7 +593,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0041 LATIN CAPITAL LETTER A through to U+005A LATIN
            ;; CAPITAL LETTER Z</dt>
            (h5-uppercase-p char-str)
@@ -637,7 +641,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char))
+         (char-str (if (numberp char) (string char) char))
          (tok *h5-curtok*)
          (anything-else
           (lambda ()
@@ -743,7 +747,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0041 LATIN CAPITAL LETTER A through to U+005A LATIN
            ;; CAPITAL LETTER Z</dt>
            (h5-uppercase-p char-str)
@@ -791,7 +795,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char))
+         (char-str (if (numberp char) (string char) char))
          (tok *h5-curtok*)
          (anything-else
           (lambda ()
@@ -875,7 +879,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond ((eq char ?/) ;; <dt>U+002F SOLIDUS (/)</dt>
            ;; <dd>Set the <var>temporary buffer</var> to the empty
            ;; string.
@@ -906,7 +910,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0041 LATIN CAPITAL LETTER A through to U+005A LATIN
            ;; CAPITAL LETTER Z</dt>
            (h5-uppercase-p char-str)
@@ -954,7 +958,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char))
+         (char-str (if (numberp char) (string char) char))
          (tok *h5-curtok*)
          (anything-else
           (lambda ()
@@ -1160,7 +1164,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond ((eq char ?/) ;; <dt>U+002F SOLIDUS (/)</dt>
            ;; <dd>Set the <var>temporary buffer</var> to the empty
            ;; string.
@@ -1212,7 +1216,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0041 LATIN CAPITAL LETTER A through to U+005A LATIN
            ;; CAPITAL LETTER Z</dt>
            (h5-uppercase-p char)
@@ -1259,7 +1263,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char))
+         (char-str (if (numberp char) (string char) char))
          (tok *h5-curtok*)
          (anything-else
           (lambda ()
@@ -1343,7 +1347,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond ((or
             ;; <dt>U+0009 CHARACTER TABULATION</dt>
             ;; <dt>U+000A LINE FEED (LF)</dt>
@@ -1353,7 +1357,8 @@ consecutive ones.")
             (h5-space-p char-str)
             ;; <dt>U+002F SOLIDUS (/)</dt>
             ;; <dt>U+003E GREATER-THAN SIGN (&gt;)</dt>
-            (string-match "[/>]" char-str))
+            (and (stringp char-str)
+                 (string-match "[/>]" char-str)))
            ;; <dd>If the <var>temporary buffer</var> is the string "<code
            ;; title="">script</code>",
            (if (string-equal (h5-tmpbuf) "script")
@@ -1508,7 +1513,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond ((or
             ;; <dt>U+0009 CHARACTER TABULATION</dt>
             ;; <dt>U+000A LINE FEED (LF)</dt>
@@ -1518,7 +1523,8 @@ consecutive ones.")
             (h5-space-p char-str)
             ;; <dt>U+002F SOLIDUS (/)</dt>
             ;; <dt>U+003E GREATER-THAN SIGN (&gt;)</dt>
-            (string-match "[/>]" char-str))
+            (and (stringp char-str)
+                 (string-match "[/>]" char-str)))
 
            ;; <dd>If the <var>temporary buffer</var> is the string
            ;; "<code title="">script</code>",
@@ -1561,7 +1567,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char))
+         (char-str (if (numberp char) (string char) char))
          (anything-else
           (lambda ()
             (setq *h5-curattr*
@@ -1612,7 +1618,8 @@ consecutive ones.")
            ;; <dt>U+0027 APOSTROPHE (')</dt>
            ;; <dt>U+003C LESS-THAN SIGN (&lt;)</dt>
            ;; <dt>U+003D EQUALS SIGN (=)</dt>
-           (string-match "[\"'<=]" char-str)
+           (and (stringp char-str)
+                (string-match "[\"'<=]" char-str))
            ;; <dd><span>Parse error</span>.
            (h5-parse-error)
            ;; Treat it as per the "anything else" entry below.</dd>
@@ -1632,7 +1639,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char))
+         (char-str (if (numberp char) (string char) char))
          (leave
           (lambda ()
             ;; When the user agent leaves the attribute name state (and
@@ -1705,7 +1712,8 @@ consecutive ones.")
           (;; <dt>U+0022 QUOTATION MARK (&quot;)</dt>
            ;; <dt>U+0027 APOSTROPHE (')</dt>
            ;; <dt>U+003C LESS-THAN SIGN (&lt;)</dt>
-           (string-match "[\"'<]" char-str)
+           (and (stringp char-str)
+                (string-match "[\"'<]" char-str))
            ;; <dd><span>Parse error</span>.
            (h5-parse-error)
            ;; Treat it as per the "anything else" entry below.</dd>
@@ -1725,7 +1733,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char))
+         (char-str (if (numberp char) (string char) char))
          (anything-else
           (lambda ()
            (setq *h5-curattr*
@@ -1780,7 +1788,8 @@ consecutive ones.")
           (;; <dt>U+0022 QUOTATION MARK (&quot;)</dt>
            ;; <dt>U+0027 APOSTROPHE (')</dt>
            ;; <dt>U+003C LESS-THAN SIGN (&lt;)</dt>
-           (string-match "[\"'<]" char-str)
+           (and (stringp char-str)
+                (string-match "[\"'<]" char-str))
            ;; <dd><span>Parse error</span>.
            (h5-parse-error)
            ;; Treat it as per the "anything else" entry below.</dd>
@@ -1800,7 +1809,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char))
+         (char-str (if (numberp char) (string char) char))
          (anything-else
           (lambda ()
             ;; <dd>Append the <span>current input character</span> to
@@ -1843,7 +1852,8 @@ consecutive ones.")
           (;; <dt>U+003C LESS-THAN SIGN (&lt;)</dt>
            ;; <dt>U+003D EQUALS SIGN (=)</dt>
            ;; <dt>U+0060 GRAVE ACCENT (`)</dt>
-           (string-match "[<=`]" char-str)
+           (and (stringp char-str)
+                (string-match "[<=`]" char-str))
            ;; <dd><span>Parse error</span>.
            (h5-parse-error)
            ;; Treat it as per the "anything else" entry below.</dd>
@@ -1863,7 +1873,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond ((eq char ?\") ;; <dt>U+0022 QUOTATION MARK (&quot;)</dt>
            ;; <dd>Switch to the <span>after attribute value (quoted)
            ;; state</span>.</dd>
@@ -1893,7 +1903,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond ((eq char ?') ;; <dt>U+0027 APOSTROPHE (')</dt>
            ;; <dd>Switch to the <span>after attribute value (quoted)
            ;; state</span>.</dd>
@@ -1923,7 +1933,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char))
+         (char-str (if (numberp char) (string char) char))
          (anything-else
           (lambda ()
             ;; <dd>Append the <span>current input character</span> to
@@ -1957,7 +1967,8 @@ consecutive ones.")
            ;; <dt>U+003C LESS-THAN SIGN (&lt;)</dt>
            ;; <dt>U+003D EQUALS SIGN (=)</dt>
            ;; <dt>U+0060 GRAVE ACCENT (`)</dt>
-           (string-match "[\"'<=`]" char-str)
+           (and (stringp char-str)
+                (string-match "[\"'<=`]" char-str))
            ;; <dd><span>Parse error</span>.
            (h5-parse-error)
            ;; Treat it as per the "anything else" entry below.</dd>
@@ -1998,7 +2009,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -2037,7 +2048,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond ((eq char ?>) ;; <dt>U+003E GREATER-THAN SIGN (&gt;)</dt>
            ;; <dd>Set the <i>self-closing flag</i> of the current tag
            ;; token.
@@ -2262,7 +2273,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond ((eq char ?>) ;; <dt>U+003E GREATER-THAN SIGN (&gt;)</dt>
            ;; <dd>Switch to the <span>data state</span>.
            (h5-switch-state 'h5-data-state)
@@ -2364,7 +2375,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -2409,7 +2420,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -2446,7 +2457,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -2508,7 +2519,7 @@ consecutive ones.")
   ;; Consume the <span>next input character</span>:
   (let* ((case-fold-search nil)
          (char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -2554,7 +2565,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -2613,7 +2624,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -2676,7 +2687,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -2809,7 +2820,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -2867,7 +2878,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -2920,7 +2931,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -2983,7 +2994,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -3115,7 +3126,7 @@ consecutive ones.")
   ""
   ;; Consume the <span>next input character</span>:
   (let* ((char (h5-consume-the-next-input-character))
-         (char-str (string char)))
+         (char-str (if (numberp char) (string char) char)))
     (cond (;; <dt>U+0009 CHARACTER TABULATION</dt>
            ;; <dt>U+000A LINE FEED (LF)</dt>
            ;; <dt>U+000C FORM FEED (FF)</dt>
@@ -3212,7 +3223,7 @@ consecutive ones.")
   ;; The behavior depends on the identity of the next character (the
   ;; one immediately after the U+0026 AMPERSAND character):
   (let* ((char (char-after))
-         (char-str (string char))
+         (char-str (if (numberp char) (string char) char))
          (char2 (char-after (1+ (point))))
          hexadecimal-flag
          range
@@ -3227,7 +3238,8 @@ consecutive ones.")
             (h5-space-p char-str)
             ;; <dt>U+003C LESS-THAN SIGN</dt>
             ;; <dt>U+0026 AMPERSAND</dt>
-            (string-match "[<&]" char-str)
+            (and (stringp char-str)
+                 (string-match "[<&]" char-str))
             ;; <dt>EOF</dt>
             (eq (1+ (point)) (point-max))
             ;; <dt>The <dfn>additional allowed character</dfn>, if there
