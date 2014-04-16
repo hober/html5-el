@@ -67,5 +67,5 @@ html5lib:
 	hg clone https://html5lib.googlecode.com/hg/ html5lib
 
 update:
-	cd relaxng; hg pull
+	cd relaxng; hg pull -u
 	cd webapps; svn up
